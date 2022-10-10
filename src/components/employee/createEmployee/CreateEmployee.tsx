@@ -1,4 +1,7 @@
 import "./CreateEmployee.scss";
+import Select from 'react-select'
+import statesList from "../../../assets/json/statesList.json"
+import departmentsList from "../../../assets/json/departmentsList.json"
 export function CreateEmployee() {
     return (
         <section className="container">
@@ -26,20 +29,14 @@ export function CreateEmployee() {
                     <input id="city" type="text" />
 
                     <label htmlFor="state">State</label>
-                    <select name="state" id="state"></select>
+                    <Select options={statesList.states} name="state" id="state"></Select>
 
                     <label htmlFor="zip-code">Zip Code</label>
                     <input id="zip-code" type="number" />
                 </fieldset>
 
                 <label htmlFor="department">Department</label>
-                <select name="department" id="department">
-                    <option>Sales</option>
-                    <option>Marketing</option>
-                    <option>Engineering</option>
-                    <option>Human Resources</option>
-                    <option>Legal</option>
-                </select>
+                <Select options={departmentsList.departments} name="department" id="department"/>
             </form>
 
             <button>Save</button>
