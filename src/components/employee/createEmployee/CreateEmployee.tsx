@@ -29,17 +29,26 @@ export function CreateEmployee() {
                     <input id="city" type="text" />
 
                     <label htmlFor="state">State</label>
-                    <Select options={statesList.states} name="state" id="state"></Select>
+                    <Select styles={getSelectStyles()} options={statesList.states} name="state" id="state"></Select>
 
                     <label htmlFor="zip-code">Zip Code</label>
                     <input id="zip-code" type="number" />
                 </fieldset>
 
                 <label htmlFor="department">Department</label>
-                <Select options={departmentsList.departments} name="department" id="department"/>
+                <Select styles={getSelectStyles()} options={departmentsList.departments} name="department" id="department"/>
             </form>
 
             <button>Save</button>
         </section>
     )
+}
+
+function getSelectStyles() {
+    return {
+        control: (provided:any) => ({
+          // none of react-select's styles are passed to <Control />
+          ...provided,
+          background: "#f6f6f6",
+        })}
 }
