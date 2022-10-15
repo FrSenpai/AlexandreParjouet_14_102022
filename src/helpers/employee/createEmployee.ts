@@ -35,7 +35,7 @@ export function isFormValid(formData: any):isFormValid{
             default: break
         }
     })
-    return { valid: false, errors: isValid.filter((v) => !v.valid).map((v) => v.error) }
+    return { valid: isValid.findIndex((v) => !v.valid) === -1, errors: isValid.filter((v) => !v.valid).map((v) => v.error) }
 }
 
 /**
