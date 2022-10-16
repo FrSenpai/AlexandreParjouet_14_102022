@@ -42,8 +42,9 @@ export function CreateEmployee() {
     return (
         <section className="container">
             <h2>Create Employee</h2>
-            <form action="#" id="create-employee">
-                <label htmlFor="first-name">First Name</label>
+            <form className="createEmployeeForm" action="#" id="create-employee">
+                <div>
+                    <label htmlFor="first-name">First Name</label>
                 <input onKeyUp={(e) => updateForm("firstName", e.currentTarget.value)} type="text" id="first-name" />
 
                 <label htmlFor="last-name">Last Name</label>
@@ -54,6 +55,8 @@ export function CreateEmployee() {
 
                 <label htmlFor="start-date">Start Date</label>
                 <CustomDatePicker onChange={(v: Date) => updateForm("startDate", v)} years={yearsRange.startDate}></CustomDatePicker>
+                </div>
+                
 
                 <fieldset className="address">
                     <legend>Address</legend>
@@ -70,10 +73,12 @@ export function CreateEmployee() {
                     <label htmlFor="zip-code">Zip Code</label>
                     <input onKeyUp={(e) => updateForm("address", { ...form.data.address, zip: e.currentTarget.value })} id="zip-code" type="number" />
                 </fieldset>
-
-                <label htmlFor="department">Department</label>
+                <div className="ctnDepartmentInput">
+                    <label htmlFor="department">Department</label>
                 <Select onChange={(e: any) => updateForm("department", e.value)} styles={getSelectStyles()} options={departmentsList.departments} name="department" id="department" />
-            </form>
+     
+                </div>
+                       </form>
             <div hidden={form.error === ""}>
                 <p>{form.error}</p>
             </div>

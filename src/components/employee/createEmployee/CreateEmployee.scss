@@ -9,7 +9,15 @@ label {
     margin-top: 10px;
 }
 
-.ctnGlobalEmployeeData {
+
+.createEmployeeForm {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    .ctnDepartmentInput {
+        width: 60%;
+        margin-bottom: 10px;
+    }
+
 }
