@@ -3,6 +3,7 @@ import { UsePaginationOptions } from "react-table";
 declare module 'react-table' {
   export interface TableOptions<D extends Record<string, unknown>> extends
     UsePaginationOptions<D>,
+    UseGlobalFiltersOptions<D>,
     Record<string, any> {}
 
   export interface TableState<D extends Record<string, unknwon> = Record<string, unknonw>> extends

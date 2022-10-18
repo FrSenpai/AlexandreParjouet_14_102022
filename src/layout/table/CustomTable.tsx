@@ -1,22 +1,25 @@
 import React from "react"
 import "./CustomTable.scss"
 import { useSelector } from "react-redux"
-import { usePagination, useTable } from 'react-table'
-import { DateTime } from "luxon";
+import { useAsyncDebounce, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { getHeaders, getTableFormatEmployee } from "../../helpers/layouts/customTable/customTable";
-export function CustomTable() {
-    const employees = useSelector((s: any) => s.employees);
-    const data: any = React.useMemo(() => getTableFormatEmployee([...employees]), [])
-    const columns: any = React.useMemo(() => getHeaders(), [])
+import { matchSorter } from "match-sorter";
+
+function fuzzyTextFilterFn(rows: any, id: any, filterValue: any) {
+    return matchSorter(rows, filterValue, { keys: [(row: any) => row.values[id]] });
+}
+
+// Let the table remove the filter if the string is empty
+fuzzyTextFilterFn.autoRemove = (val: any) => !val;
+
+// Our table component
+function Table({ columns, data }: any) {
     const {
         getTableProps,
         getTableBodyProps,
         headerGroups,
         prepareRow,
-        page, // Instead of using 'rows', we'll use page,
-        // which has only the rows for the active page
-
-        // The rest of these things are super handy, too ;)
+        page,
         canPreviousPage,
         canNextPage,
         pageOptions,
@@ -25,24 +28,41 @@ export function CustomTable() {
         nextPage,
         previousPage,
         setPageSize,
+        preGlobalFilteredRows,
+        setGlobalFilter,
         state: { pageIndex, pageSize }
     }: any = useTable(
         {
             columns,
             data,
+            globalFilter: '',
             initialState: { pageIndex: 0, pageSize: 5 },
-        },
-        usePagination
+        }, useGlobalFilter, useSortBy, usePagination
     )
 
     return (
         <div>
+            <GlobalFilter
+                preGlobalFilteredRows={preGlobalFilteredRows}
+                globalFilter={""}
+                setGlobalFilter={setGlobalFilter}
+            />
             <table className="customTable" {...getTableProps()}>
+
                 <thead>
                     {headerGroups.map((headerGroup: any) => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
                             {headerGroup.headers.map((column: any) => (
-                                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                    {column.render('Header')}
+                                    <span>
+                                        {column.isSorted
+                                            ? column.isSortedDesc
+                                                ? ' 🔽'
+                                                : ' 🔼'
+                                            : ''}
+                                    </span>
+                                </th>
                             ))}
                         </tr>
                     ))}
@@ -105,7 +125,46 @@ export function CustomTable() {
                 </select>
             </div>
         </div>
-
-    )
-
+    );
 }
+function GlobalFilter({
+    preGlobalFilteredRows,
+    globalFilter,
+    setGlobalFilter,
+}: any) {
+    const count = preGlobalFilteredRows.length
+    const [value, setValue] = React.useState(globalFilter)
+    const onChange = useAsyncDebounce((value: any) => {
+        setGlobalFilter(value || undefined)
+    }, 200)
+
+    return (
+        <span>
+            Search:{' '}
+            <input
+                value={value || ""}
+                onChange={e => {
+                    setValue(e.target.value);
+                    onChange(e.target.value);
+                }}
+                placeholder={`${count} records...`}
+                style={{
+                    fontSize: '1.1rem',
+                    border: '0',
+                }}
+            />
+        </span>
+    )
+}
+
+export function CustomTable() {
+    const employees = useSelector((s: any) => s.employees);
+    const data: any = React.useMemo(() => getTableFormatEmployee([...employees]), [])
+    const columns: any = React.useMemo(() => getHeaders(), [])
+    return (
+        <Table columns={columns} data={data}></Table>
+    )
+}
+
+
+
