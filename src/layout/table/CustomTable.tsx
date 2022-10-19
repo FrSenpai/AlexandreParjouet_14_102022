@@ -4,11 +4,15 @@ import { useSelector } from "react-redux"
 import { useAsyncDebounce, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { getHeaders, getTableFormatEmployee } from "../../helpers/layouts/customTable/customTable";
 import { matchSorter } from "match-sorter";
-
+import CssBaseline from '@mui/material/CssBaseline'
+import MaUTable from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
 function fuzzyTextFilterFn(rows: any, id: any, filterValue: any) {
     return matchSorter(rows, filterValue, { keys: [(row: any) => row.values[id]] });
 }
-
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = (val: any) => !val;
 
@@ -36,94 +40,89 @@ function Table({ columns, data }: any) {
             columns,
             data,
             globalFilter: '',
-            initialState: { pageIndex: 0, pageSize: 5 },
+            initialState: { pageIndex: 0, pageSize: 10 },
         }, useGlobalFilter, useSortBy, usePagination
     )
 
     return (
         <div>
-            <GlobalFilter
-                preGlobalFilteredRows={preGlobalFilteredRows}
-                globalFilter={""}
-                setGlobalFilter={setGlobalFilter}
-            />
-            <table className="customTable" {...getTableProps()}>
+            <div className="ctnTopActionsTable">
+                <div>
+                    <span>Show </span>
+                    <select
+                        value={pageSize}
+                        onChange={e => {
+                            setPageSize(Number(e.target.value))
+                        }}
+                    >
+                        {[10, 20, 30, 40, 50].map(pageSize => (
+                            <option key={pageSize} value={pageSize}>
+                                {pageSize}
+                            </option>
+                        ))}
+                    </select>
+                    <span> entries</span>
+                </div>
+                <GlobalFilter
+                    preGlobalFilteredRows={preGlobalFilteredRows}
+                    globalFilter={""}
+                    setGlobalFilter={setGlobalFilter}
+                />
+            </div>
 
-                <thead>
+            <MaUTable className="customTable" {...getTableProps()}>
+
+                <TableHead>
                     {headerGroups.map((headerGroup: any) => (
-                        <tr {...headerGroup.getHeaderGroupProps()}>
+                        <TableRow {...headerGroup.getHeaderGroupProps()}>
                             {headerGroup.headers.map((column: any) => (
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                <TableCell {...column.getHeaderProps(column.getSortByToggleProps())}>
                                     {column.render('Header')}
-                                    <span>
+                                    <span className="tableFilterArrows">
                                         {column.isSorted
                                             ? column.isSortedDesc
-                                                ? ' 🔽'
-                                                : ' 🔼'
-                                            : ''}
+                                                ? ' ↓'
+                                                : ' ↑'
+                                            : '↕'}
                                     </span>
-                                </th>
+                                </TableCell>
                             ))}
-                        </tr>
+                        </TableRow>
                     ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
+                </TableHead>
+                <TableBody {...getTableBodyProps()}>
                     {page.map((row: any, i: any) => {
                         prepareRow(row)
                         return (
-                            <tr {...row.getRowProps()}>
+                            <TableRow {...row.getRowProps()}>
                                 {row.cells.map((cell: any) => {
-                                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                    return <TableCell {...cell.getCellProps()}>{cell.render('Cell')}</TableCell>
                                 })}
-                            </tr>
+                            </TableRow>
                         )
                     })}
-                </tbody>
-            </table>
-            <div className="pagination">
-                <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                    {'<<'}
-                </button>{' '}
-                <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-                    {'<'}
-                </button>{' '}
-                <button onClick={() => nextPage()} disabled={!canNextPage}>
-                    {'>'}
-                </button>{' '}
-                <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-                    {'>>'}
-                </button>{' '}
-                <span>
-                    Page{' '}
-                    <strong>
-                        {pageIndex + 1} of {pageOptions.length}
-                    </strong>{' '}
-                </span>
-                <span>
-                    | Go to page:{' '}
-                    <input
-                        type="number"
-                        defaultValue={pageIndex + 1}
-                        onChange={e => {
-                            const page = e.target.value ? Number(e.target.value) - 1 : 0
-                            gotoPage(page)
-                        }}
-                        style={{ width: '100px' }}
-                    />
-                </span>{' '}
-                <select
-                    value={pageSize}
-                    onChange={e => {
-                        setPageSize(Number(e.target.value))
-                    }}
-                >
-                    {[10, 20, 30, 40, 50].map(pageSize => (
-                        <option key={pageSize} value={pageSize}>
-                            Show {pageSize}
-                        </option>
-                    ))}
-                </select>
+                </TableBody>
+            </MaUTable>
+            <div className="ctnTopActionsTable">
+                <div>Showing {pageSize * pageIndex + 1} to {(pageSize * (pageIndex + 1)) < data.length ? (pageSize * (pageIndex + 1)) : data.length} of {data.length} entries</div>
+                <div className="pagination">
+                    {' '}
+                    <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+                        {'<'}
+                    </button>{' '}
+                    <span>
+                        Page{' '}
+                        <strong>
+                            {pageIndex + 1} of {pageOptions.length}
+                        </strong>{' '}
+                    </span>
+                    <button onClick={() => nextPage()} disabled={!canNextPage}>
+                        {'>'}
+                    </button>{' '}
+                </div>
             </div>
+
+
         </div>
     );
 }
