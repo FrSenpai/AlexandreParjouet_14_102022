@@ -14,7 +14,6 @@ export function CreateEmployee() {
     const [form, setForm] = useState({ data: { firstName: null, lastName: null, birthDay: null, startDate: null, address: { street: null, city: null, state: null, zip: null }, department: null }, error: "" })
     const yearsRange: any = { birthDate: [].concat(range(100, new Date().getFullYear() - 100)), startDate: [].concat(range(10, new Date().getFullYear())) }
     const dispatch = useDispatch();
-    console.log(store.getState())
     const employees = useSelector((s: any) => s.employee);
     /**
      * 
