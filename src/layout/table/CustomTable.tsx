@@ -4,7 +4,6 @@ import { useSelector } from "react-redux"
 import { useAsyncDebounce, useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { getHeaders, getTableFormatEmployee } from "../../helpers/layouts/customTable/customTable";
 import { matchSorter } from "match-sorter";
-import CssBaseline from '@mui/material/CssBaseline'
 import MaUTable from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -27,8 +26,6 @@ function Table({ columns, data }: any) {
         canPreviousPage,
         canNextPage,
         pageOptions,
-        pageCount,
-        gotoPage,
         nextPage,
         previousPage,
         setPageSize,

@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
  * @param onChange {function} the function to be called when the date is changed
  */
 export function CustomDatePicker({ years, onChange }: { years: number[], onChange: Function }) {
-  const [startDate, setStartDate]: any = useState(null);
+  const [startDate, setStartDate]: any = useState(undefined);
   const months = [
     "January",
     "February",

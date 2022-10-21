@@ -12,9 +12,9 @@ import { add } from "../../../store/reducers/employee/EmployeeReducer";
 import {CustomModal} from 'basic-react-modal'
 import 'basic-react-modal/dist/index.css'
 export function CreateEmployee() {
-    const [form, setForm] = useState({ data: { firstName: null, lastName: null, birthDay: null, startDate: null, address: { street: null, city: null, state: null, zip: null }, department: null }, error: "" })
+    const [form, setForm] = useState({ data: { firstName: null, lastName: null, birthDay: null, startDate: null, address: { street: null, city: null, state: "AL", zip: null }, department: "Sales" }, error: "" })
     const [showModal, setShowModal] = useState(false)
-    const yearsRange: any = { birthDate: [].concat(range(100, new Date().getFullYear() - 100)), startDate: [].concat(range(10, new Date().getFullYear())) }
+    const yearsRange: any = { birthDate: [].concat(range(100, new Date().getFullYear() - 99)), startDate: [].concat(range(10, new Date().getFullYear())) }
     const dispatch = useDispatch();
     /**
      * 
@@ -83,14 +83,14 @@ export function CreateEmployee() {
                     <input onKeyUp={(e) => updateForm("address", { ...form.data.address, city: e.currentTarget.value })} id="city" type="text" />
 
                     <label htmlFor="state">State</label>
-                    <Select onChange={(e: any) => updateForm("address", { ...form.data.address, state: e.value })} styles={getSelectStyles()} options={statesList.states} name="state" id="state"></Select>
+                    <Select onChange={(e: any) => updateForm("address", { ...form.data.address, state: e.value })} styles={getSelectStyles()} options={statesList.states} defaultValue={statesList.states[0]} name="state" id="state"></Select>
 
                     <label htmlFor="zip-code">Zip Code</label>
                     <input onKeyUp={(e) => updateForm("address", { ...form.data.address, zip: e.currentTarget.value })} id="zip-code" type="number" />
                 </fieldset>
                 <div className="ctnDepartmentInput">
                     <label htmlFor="department">Department</label>
-                    <Select onChange={(e: any) => updateForm("department", e.value)} styles={getSelectStyles()} options={departmentsList.departments} name="department" id="department" />
+                    <Select onChange={(e: any) => updateForm("department", e.value)} defaultValue={departmentsList.departments[0]}  styles={getSelectStyles()} options={departmentsList.departments} name="department" id="department" />
 
                 </div>
             </form>
