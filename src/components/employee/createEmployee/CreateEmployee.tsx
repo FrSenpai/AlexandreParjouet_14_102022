@@ -7,14 +7,15 @@ import { CustomDatePicker } from "../../../layout/datepicker/DatePicker";
 import { range } from "../../../utils/range";
 import { useState } from "react";
 import { isFormValid } from "../../../helpers/employee/createEmployee";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { add } from "../../../store/reducers/employee/EmployeeReducer";
-import { store } from "../../../store/store";
+import {CustomModal} from 'basic-react-modal'
+import 'basic-react-modal/dist/index.css'
 export function CreateEmployee() {
     const [form, setForm] = useState({ data: { firstName: null, lastName: null, birthDay: null, startDate: null, address: { street: null, city: null, state: null, zip: null }, department: null }, error: "" })
+    const [showModal, setShowModal] = useState(false)
     const yearsRange: any = { birthDate: [].concat(range(100, new Date().getFullYear() - 100)), startDate: [].concat(range(10, new Date().getFullYear())) }
     const dispatch = useDispatch();
-    const employees = useSelector((s: any) => s.employee);
     /**
      * 
      * @param attrName {string} the name of the attribute to be updated (need to exist in the form state)
@@ -27,15 +28,30 @@ export function CreateEmployee() {
      * @description Submit the form -> we check if the form is valid, if it is, we hydrate the redux store with the form data
      */
     const submitForm = () => {
-        console.log("putain click ta race !")
         if (!isFormValid(form.data).valid) {
             //we take only the first error, but we could display all of them
             setForm({ ...form, error: isFormValid(form.data).errors[0] })
         } else {
-            //TODO: Display modal 
             dispatch(add({ ...form.data }))
             setForm({ ...form, error: "" })
+            setShowModal(true)
         }
+    }
+    /**
+     * @description used to close the modal
+     */
+    const closeModal = () => {
+        setShowModal(!showModal)
+    }
+
+    const modalChildren = () => {
+        return (
+            <section className="ctnModalEmployee">
+                <h3>Employee created !</h3>
+                <p>The employee has been created.</p>
+                <button onClick={() => closeModal()}>Close</button>
+            </section>
+        )
     }
 
     return (
@@ -44,18 +60,18 @@ export function CreateEmployee() {
             <form className="createEmployeeForm" action="#" id="create-employee">
                 <div>
                     <label htmlFor="first-name">First Name</label>
-                <input onKeyUp={(e) => updateForm("firstName", e.currentTarget.value)} type="text" id="first-name" />
+                    <input onKeyUp={(e) => updateForm("firstName", e.currentTarget.value)} type="text" id="first-name" />
 
-                <label htmlFor="last-name">Last Name</label>
-                <input onKeyUp={(e) => updateForm("lastName", e.currentTarget.value)} type="text" id="last-name" />
+                    <label htmlFor="last-name">Last Name</label>
+                    <input onKeyUp={(e) => updateForm("lastName", e.currentTarget.value)} type="text" id="last-name" />
 
-                <label htmlFor="date-of-birth">Date of Birth</label>
-                <CustomDatePicker onChange={(v: Date) => updateForm("birthDay", v)} years={yearsRange.birthDate}></CustomDatePicker>
+                    <label htmlFor="date-of-birth">Date of Birth</label>
+                    <CustomDatePicker onChange={(v: Date) => updateForm("birthDay", v)} years={yearsRange.birthDate}></CustomDatePicker>
 
-                <label htmlFor="start-date">Start Date</label>
-                <CustomDatePicker onChange={(v: Date) => updateForm("startDate", v)} years={yearsRange.startDate}></CustomDatePicker>
+                    <label htmlFor="start-date">Start Date</label>
+                    <CustomDatePicker onChange={(v: Date) => updateForm("startDate", v)} years={yearsRange.startDate}></CustomDatePicker>
                 </div>
-                
+
 
                 <fieldset className="address">
                     <legend>Address</legend>
@@ -74,17 +90,19 @@ export function CreateEmployee() {
                 </fieldset>
                 <div className="ctnDepartmentInput">
                     <label htmlFor="department">Department</label>
-                <Select onChange={(e: any) => updateForm("department", e.value)} styles={getSelectStyles()} options={departmentsList.departments} name="department" id="department" />
-     
+                    <Select onChange={(e: any) => updateForm("department", e.value)} styles={getSelectStyles()} options={departmentsList.departments} name="department" id="department" />
+
                 </div>
-                       </form>
+            </form>
             <div hidden={form.error === ""}>
                 <p>{form.error}</p>
             </div>
             <button onClick={() => { submitForm() }}>Save</button>
+            <CustomModal show={showModal} close={closeModal} children={modalChildren()}></CustomModal>
         </section>
     )
 }
+
 
 function getSelectStyles() {
     return {
