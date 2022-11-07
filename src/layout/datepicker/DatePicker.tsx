@@ -41,7 +41,7 @@ export function CustomDatePicker({ years, onChange }: { years: number[], onChang
             justifyContent: "center",
           }}
         >
-          <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
+          <button type="button" onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
             {"<"}
           </button>
           <select
@@ -68,7 +68,7 @@ export function CustomDatePicker({ years, onChange }: { years: number[], onChang
             ))}
           </select>
 
-          <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
+          <button type="button" onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
             {">"}
           </button>
         </div>
