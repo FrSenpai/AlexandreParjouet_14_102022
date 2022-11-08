@@ -8,16 +8,13 @@ export const employeeSlice = createSlice({
     initialState,
     reducers: {
         set: (state, action) => {
-            state.employees = action.payload //TRY IT 
+            state.employees = action.payload 
         },
         add: (state, action) => {
-            console.log("payload", action)
             state.employees = state.employees.concat(action.payload)
-
         },
         remove: (state, action) => {
             //TODO
-
         },
         reset: (state) => {
             state.employees = initialState.employees
