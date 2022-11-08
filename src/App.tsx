@@ -10,9 +10,13 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <HashRouter>
+        {/* Use HashRouter in production but not in development, use BrowserRouter instead, to handle errors page */}
+        {/* <HashRouter> */}
+        <BrowserRouter>
           <RouterNavigation></RouterNavigation>
-        </HashRouter>
+        </BrowserRouter>
+
+        {/* </HashRouter> */}
       </PersistGate>
     </Provider>
 
