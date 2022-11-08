@@ -4,6 +4,9 @@ interface EmployeeAddress {
     state: string;
     zip: string;
 }
+/**
+ * Employee model
+ */
 export interface Employee {
     firstName:string;
     lastName:string;

@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import { CustomTable } from "../../layout/table/CustomTable";
 import "./EmployeeList.scss";
+/**
+ * 
+ * @returns a component that displays the employee list
+ */
 export function EmployeeList() {
     return (
         <div>

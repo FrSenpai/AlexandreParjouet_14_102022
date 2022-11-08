@@ -11,11 +11,17 @@ import { useDispatch } from "react-redux";
 import { add } from "../../../store/reducers/employee/EmployeeReducer";
 import {CustomModal} from 'basic-react-modal'
 import 'basic-react-modal/dist/index.css'
+/**
+ * 
+ * @returns a component that displays the create employee form
+ */
 export function CreateEmployee() {
     const [form, setForm] = useState({ data: { firstName: null, lastName: null, birthDay: null, startDate: null, address: { street: null, city: null, state: "AL", zip: null }, department: "Sales" }, error: "" })
     const [showModal, setShowModal] = useState(false)
+    //yearsRange is used to display the years in the date picker
     const yearsRange: any = { birthDate: [].concat(range(100, new Date().getFullYear() - 99)), startDate: [].concat(range(10, new Date().getFullYear())) }
     const dispatch = useDispatch();
+
     /**
      * 
      * @param attrName {string} the name of the attribute to be updated (need to exist in the form state)
@@ -24,6 +30,7 @@ export function CreateEmployee() {
     const updateForm = (attrName: string, newValue: any) => {
         setForm({ ...form, data: { ...form.data, [attrName]: newValue } })
     }
+
     /**
      * @description Submit the form -> we check if the form is valid, if it is, we hydrate the redux store with the form data
      */
@@ -32,6 +39,7 @@ export function CreateEmployee() {
             //we take only the first error, but we could display all of them
             setForm({ ...form, error: isFormValid(form.data).errors[0] })
         } else {
+            //we hydrate the redux store with the form data
             dispatch(add({ ...form.data }))
             setForm({ ...form, error: "" })
             setShowModal(true)
@@ -43,7 +51,10 @@ export function CreateEmployee() {
     const closeModal = () => {
         setShowModal(!showModal)
     }
-
+    /**
+     * 
+     * @returns a component that contains the content of the modal
+     */
     const modalChildren = () => {
         return (
             <section className="ctnModalEmployee">
@@ -103,7 +114,10 @@ export function CreateEmployee() {
     )
 }
 
-
+/**
+ * 
+ * @returns the styles of the select component
+ */
 function getSelectStyles() {
     return {
         control: (provided: any) => ({

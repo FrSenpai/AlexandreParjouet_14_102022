@@ -8,15 +8,18 @@ export const employeeSlice = createSlice({
     initialState,
     reducers: {
         set: (state, action) => {
+            //To set the full employees list
             state.employees = action.payload 
         },
         add: (state, action) => {
+            //To add a new employee to the list of employees
             state.employees = state.employees.concat(action.payload)
         },
         remove: (state, action) => {
             //TODO
         },
         reset: (state) => {
+            //To reset the employees list
             state.employees = initialState.employees
         },
     },

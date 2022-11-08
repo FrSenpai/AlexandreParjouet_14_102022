@@ -17,6 +17,7 @@ fuzzyTextFilterFn.autoRemove = (val: any) => !val;
 
 // Our table component
 function Table({ columns, data }: any) {
+    //we load what we need
     const {
         getTableProps,
         getTableBodyProps,
@@ -123,6 +124,11 @@ function Table({ columns, data }: any) {
         </div>
     );
 }
+/**
+ * 
+ * @param {*} param the props of the component we need from the parent
+ * @returns a search component
+ */
 function GlobalFilter({
     preGlobalFilteredRows,
     globalFilter,
@@ -153,9 +159,15 @@ function GlobalFilter({
     )
 }
 
+/**
+ * 
+ * @returns the table of employees
+ */
 export function CustomTable() {
     const employees = useSelector((s: any) => s.employees);
+    //we format the data to be used in the table
     const data: any = React.useMemo(() => getTableFormatEmployee([...employees]), [])
+    //we get the headers to be used in the table
     const columns: any = React.useMemo(() => getHeaders(), [])
     return (
         <Table columns={columns} data={data}></Table>

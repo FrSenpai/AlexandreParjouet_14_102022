@@ -13,6 +13,8 @@ interface isFormValid {
  */
 export function isFormValid(formData: any):isFormValid{
     const isValid: Valid[] = []
+    //we check if the form is valid by checking if the fields are not empty and if the date is valid
+    //errors can be object or string so we need to check both
     Object.keys(formData).forEach((key) => {
         switch (typeof formData[key]) {
             case "string":

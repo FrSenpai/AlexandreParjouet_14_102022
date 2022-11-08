@@ -1,4 +1,9 @@
 import { DateTime } from 'luxon';
+/**
+ * 
+ * @param employees employees list
+ * @returns formatted employees list to use it on table
+ */
 export function getTableFormatEmployee(employees: any) {
     const formattedEmployees: Array<any> = []
     employees.forEach((employee: any) => {
@@ -17,6 +22,10 @@ export function getTableFormatEmployee(employees: any) {
     return formattedEmployees
 }
 
+/**
+ * 
+ * @returns the headers of the table containing the employee list
+ */
 export function getHeaders() {
     const headers = [
         {
